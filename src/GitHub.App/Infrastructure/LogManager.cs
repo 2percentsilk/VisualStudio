@@ -19,6 +19,7 @@ namespace GitHub.Infrastructure
             const long fileSizeLimitBytes = 2L*1024L*1024L;
 
             return new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .Enrich.WithThreadId()
                 .WriteTo.File(logPath,
                     fileSizeLimitBytes: fileSizeLimitBytes,

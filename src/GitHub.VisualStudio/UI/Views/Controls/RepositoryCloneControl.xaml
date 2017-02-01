@@ -318,7 +318,7 @@
                     Margin="0,-70,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Visibility="{Binding NoRepositoriesFound, Mode=OneWay, Converter={ui:BooleanToVisibilityConverter}}">
+                    Visibility="{Binding NoRepositoriesFound, Converter={ui:BooleanToVisibilityConverter}}">
           <TextBlock HorizontalAlignment="Center"
                      Style="{DynamicResource GitHubH2TextBlock}"
                      Text="{x:Static prop:Resources.noRepositoriesMessageText}" />

@@ -63,6 +63,8 @@ namespace GitHub.ViewModels
             INotificationService notificationService,
             IUsageTracker usageTracker)
         {
+            log.Debug("Constructing");
+
             this.repositoryHost = repositoryHost;
             this.cloneService = cloneService;
             this.operatingSystem = operatingSystem;
@@ -85,17 +87,24 @@ namespace GitHub.ViewModels
                 (loading, failed) =>
                 {
                     if (loading.Value)
+                    {
+                        log.Debug("NoRespositoriesFound Handler: Loading");
                         return false;
+                    }
 
                     if (failed.Value)
+                    {
+                        log.Debug("NoRespositoriesFound Handler: Failed");
                         return false;
+                    }
 
-                    var hasNoRepositories = repositories.UnfilteredCount == 0;
+                    log.Debug("NoRespositoriesFound UnfilteredCount: {UnfilteredCount}", repositories.UnfilteredCount);
 
-                    return hasNoRepositories;
+                    return repositories.UnfilteredCount == 0;
                 })
                 .Subscribe(x =>
                 {
+                    log.Debug("NoRespositoriesFound: {x}", x);
                     NoRepositoriesFound = x;
                 });
 
@@ -135,18 +144,26 @@ namespace GitHub.ViewModels
             base.Initialize(data);
 
             IsLoading = true;
-            Repositories = repositoryHost.ModelService.GetRepositories(repositories) as TrackingCollection<IRemoteRepositoryModel>;
-            repositories.OriginalCompleted.Subscribe(
+            log.Debug("Loading Repositories");
+
+            var remoteRepositoryModels = repositoryHost.ModelService.GetRepositories(repositories) as TrackingCollection<IRemoteRepositoryModel>;
+            remoteRepositoryModels.OriginalCompleted.Subscribe(
                 _ => { }
                 , ex =>
                 {
+                    log.Error(ex, "Error while loading repositories");
                     LoadingFailed = true;
                     IsLoading = false;
-                    log.Error(ex, "Error while loading repositories");
                 },
-                () => IsLoading = false
+                () =>
+                {
+                    log.Debug("Loaded Repositories");
+                    IsLoading = false;
+                }
             );
-            repositories.Subscribe();
+            remoteRepositoryModels.Subscribe();
+
+            Repositories = remoteRepositoryModels;
         }
 
         bool FilterRepository(IRemoteRepositoryModel repo, int position, IList<IRemoteRepositoryModel> list)
