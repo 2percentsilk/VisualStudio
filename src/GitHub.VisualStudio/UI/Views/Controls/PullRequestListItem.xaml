@@ -6,7 +6,8 @@
                     xmlns:models="clr-namespace:GitHub.Models;assembly=GitHub.Exports"
                     xmlns:viewmodels="clr-namespace:GitHub.ViewModels;assembly=GitHub.Exports.Reactive"
                     xmlns:vsui="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.14.0"
-                    xmlns:ui="clr-namespace:GitHub.UI;assembly=GitHub.UI">
+                    xmlns:ui="clr-namespace:GitHub.UI;assembly=GitHub.UI"
+                    xmlns:prop="clr-namespace:GitHub.VisualStudio.UI;assembly=GitHub.VisualStudio.UI">
 
   <ResourceDictionary.MergedDictionaries>
     <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.VisualStudio.UI;component/SharedDictionary.xaml"/>
@@ -57,7 +58,7 @@
             TextTrimming="CharacterEllipsis"
             Margin="0,-3,5,0"
             Content="{Binding Title}"
-            ToolTip="View Pull Request details"
+            ToolTip="{x:Static prop:Resources.OpenPRToolTip}"
             Command="{Binding OpenPR, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PullRequestListView}}}"
             CommandParameter="{Binding Number}"/>
         
@@ -110,7 +111,7 @@
                 Command="{Binding OpenPROnGitHub, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PullRequestListView}}}"
                 CommandParameter="{Binding Number}"
                 Content="{Binding Number}"
-                ToolTip="View Pull Request on GitHub"
+                ToolTip="{x:Static prop:Resources.OpenPROnGitHubToolTip}"
                 FontFamily="Segoe UI"
                 Style="{StaticResource HashtagActionLink}" />
         <TextBlock x:Name="description"

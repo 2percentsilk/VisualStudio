@@ -375,4 +375,10 @@
   <data name="UpdatedFormat" xml:space="preserve">
     <value>updated {0}</value>
   </data>
+  <data name="OpenPROnGitHubToolTip" xml:space="preserve">
+    <value>View Pull Request on GitHub</value>
+  </data>
+  <data name="OpenPRToolTip" xml:space="preserve">
+    <value>View Pull Request details</value>
+  </data>
 </root>
