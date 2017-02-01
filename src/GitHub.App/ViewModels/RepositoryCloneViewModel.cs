@@ -81,8 +81,22 @@ namespace GitHub.ViewModels
                 .ToProperty(this, x => x.FilterTextIsEnabled);
 
             this.WhenAny(x => x.IsLoading, x => x.LoadingFailed,
-                (loading, failed) => !loading.Value && !failed.Value && repositories.UnfilteredCount == 0)
-                .Subscribe(x => NoRepositoriesFound = x);
+                (loading, failed) =>
+                {
+                    if (loading.Value)
+                        return false;
+
+                    if (failed.Value)
+                        return false;
+
+                    var hasNoRepositories = repositories.UnfilteredCount == 0;
+
+                    return hasNoRepositories;
+                })
+                .Subscribe(x =>
+                {
+                    NoRepositoriesFound = x;
+                });
 
             this.WhenAny(x => x.FilterText, x => x.Value)
                 .DistinctUntilChanged(StringComparer.OrdinalIgnoreCase)

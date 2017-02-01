@@ -2238,4 +2238,39 @@ public class TrackingTests : TestBase
 
         col.Dispose();
     }
+
+    [Test]
+    public void UpdatesOriginalCountAsExpected()
+    {
+        var source = new Subject<Thing>();
+
+        var col = new TrackingCollection<Thing>(source);
+        col.Comparer = OrderedComparer<Thing>.OrderBy(x => x.UpdatedAt).Compare;
+        col.NewerComparer = OrderedComparer<Thing>.OrderByDescending(x => x.UpdatedAt).Compare;
+        col.Filter = (item, position, list) => false;
+        col.ProcessingDelay = TimeSpan.Zero;
+
+        var evt = new ManualResetEvent(false);
+
+        int colUnfilteredCount = -1;
+        col.OriginalCompleted.Subscribe(unit =>
+        {
+            colUnfilteredCount = col.UnfilteredCount;
+            evt.Set();
+        });
+
+        col.Subscribe();
+
+        var expectedCount = 9;
+        Enumerable.Range(0, expectedCount)
+            .Select(x => GetThing(x, x))
+            .ForEach(x => Add(source, x));
+
+        source.OnCompleted();
+
+        evt.WaitOne();
+        
+        Assert.AreEqual(0, col.Count);
+        Assert.AreEqual(expectedCount, colUnfilteredCount);
+    }
 }
