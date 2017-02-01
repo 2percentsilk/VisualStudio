@@ -264,6 +264,7 @@ namespace GitHub.Api
 
         public IObservable<Repository> GetRepositories()
         {
+            log.Debug("GetRepositories");
             return gitHubClient.Repository.GetAllForCurrent();
         }
 

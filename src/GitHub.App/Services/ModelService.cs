@@ -203,6 +203,8 @@ namespace GitHub.Services
 
         public ITrackingCollection<IRemoteRepositoryModel> GetRepositories(ITrackingCollection<IRemoteRepositoryModel> collection)
         {
+            log.Debug("GetRepositories");
+
             var keyobs = GetUserFromCache()
                 .Select(user => string.Format(CultureInfo.InvariantCulture, "{0}|{1}", CacheIndex.RepoPrefix, user.Login));
 

@@ -146,8 +146,9 @@ namespace GitHub.ViewModels
             IsLoading = true;
             log.Debug("Loading Repositories");
 
-            var remoteRepositoryModels = repositoryHost.ModelService.GetRepositories(repositories) as TrackingCollection<IRemoteRepositoryModel>;
-            remoteRepositoryModels.OriginalCompleted.Subscribe(
+            Repositories = repositoryHost.ModelService.GetRepositories(repositories) as TrackingCollection<IRemoteRepositoryModel>;
+
+            repositories.OriginalCompleted.Subscribe(
                 _ => { }
                 , ex =>
                 {
@@ -161,9 +162,8 @@ namespace GitHub.ViewModels
                     IsLoading = false;
                 }
             );
-            remoteRepositoryModels.Subscribe();
 
-            Repositories = remoteRepositoryModels;
+            repositories.Subscribe();
         }
 
         bool FilterRepository(IRemoteRepositoryModel repo, int position, IList<IRemoteRepositoryModel> list)
