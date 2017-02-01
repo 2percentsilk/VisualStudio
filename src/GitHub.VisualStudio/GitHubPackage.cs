@@ -11,10 +11,15 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Octokit;
 using GitHub.Helpers;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+using GitHub.Info;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 using GitHub.VisualStudio.Menus;
+using Rothko;
+using Serilog;
+using Environment = System.Environment;
 using System.ComponentModel.Design;
 using GitHub.ViewModels;
 

@@ -9,11 +9,12 @@ using GitHub.Extensions;
 using GitHub.Models;
 using GitHub.Services;
 using GitHub.UI;
-using NLog;
 using NullGuard;
 using ReactiveUI;
 using System.Diagnostics;
 using System.Globalization;
+using GitHub.Infrastructure;
+using Serilog;
 
 namespace GitHub.ViewModels
 {
@@ -21,7 +22,8 @@ namespace GitHub.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class LogoutRequiredViewModel : BaseViewModel, ILogoutRequiredViewModel
     {
-        static readonly Logger log = LogManager.GetCurrentClassLogger();
+        static readonly ILogger log = LogManager.ForContext<LogoutRequiredViewModel>();
+
         readonly IRepositoryHosts repositoryHosts;
         readonly INotificationService notificationService;
 
@@ -61,7 +63,7 @@ namespace GitHub.ViewModels
                 {
                     if (!ex.IsCriticalException())
                     {
-                        log.Error(ex);
+                        log.Error(ex, "Logout Error");
                         var error = StandardUserErrors.GetUserFriendlyErrorMessage(ex, ErrorType.LogoutFailed);
                         notificationService.ShowError(error);
                     }

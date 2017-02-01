@@ -9,20 +9,21 @@ using GitHub.Authentication;
 using GitHub.Extensions;
 using GitHub.Extensions.Reactive;
 using GitHub.Info;
+using GitHub.Infrastructure;
 using GitHub.Models;
 using GitHub.Primitives;
 using GitHub.Services;
 using GitHub.Validation;
-using NLog;
 using NullGuard;
 using ReactiveUI;
+using Serilog;
 
 namespace GitHub.ViewModels
 {
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public abstract class LoginTabViewModel : ReactiveObject
     {
-        static readonly Logger log = LogManager.GetCurrentClassLogger();
+        static readonly ILogger log = LogManager.ForContext<LoginTabViewModel>();
 
         protected LoginTabViewModel(IRepositoryHosts repositoryHosts, IVisualStudioBrowser browser)
         {
@@ -46,7 +47,7 @@ namespace GitHub.ViewModels
             {
                 if (ex.IsCriticalException()) return;
 
-                log.Info(string.Format(CultureInfo.InvariantCulture, "Error logging into '{0}' as '{1}'", BaseUri, UsernameOrEmail), ex);
+                log.Information(ex, "Error logging into '{BaseUri}' as '{UsernameOrEmail}'", BaseUri, UsernameOrEmail);
                 if (ex is Octokit.ForbiddenException)
                 {
                     UserError.Throw(new UserError(Resources.LoginFailedForbiddenMessage));
