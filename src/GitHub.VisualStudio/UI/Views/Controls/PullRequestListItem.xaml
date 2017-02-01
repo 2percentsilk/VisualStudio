@@ -57,7 +57,7 @@
             TextTrimming="CharacterEllipsis"
             Margin="0,-3,5,0"
             Content="{Binding Title}"
-            ToolTip="{Binding Title}"
+            ToolTip="View Pull Request details"
             Command="{Binding OpenPR, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PullRequestListView}}}"
             CommandParameter="{Binding Number}"/>
         
@@ -110,6 +110,7 @@
                 Command="{Binding OpenPROnGitHub, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:PullRequestListView}}}"
                 CommandParameter="{Binding Number}"
                 Content="{Binding Number}"
+                ToolTip="View Pull Request on GitHub"
                 FontFamily="Segoe UI"
                 Style="{StaticResource HashtagActionLink}" />
         <TextBlock x:Name="description"
